@@ -132,10 +132,10 @@
 
 <main>
 	<h1>Combat report calculator</h1>
-	<input type="text" bind:value={currentLevel}>
+	<input type="number" bind:value={currentLevel}>
 	<input type="range" min="1" max="120" bind:value={currentLevel}>
 	
-	<input type="text" bind:value={targetLevel}>
+	<input type="number" bind:value={targetLevel}>
 	<input type="range" min="1" max="120" bind:value={targetLevel}>
 
 	<br><label>
