@@ -1,6 +1,9 @@
 <script>
 	let currentLevel = 1;
 	let targetLevel = 90;
+	let levelDifference = 0;
+	let multiplier = 1;
+	let xpToGain = 0;
 	let oathed = false;
 
 	let xpByLevel = [
@@ -126,16 +129,18 @@
 		30283200,
 	];
 
-	$: multiplier = 1
-	$: if (oathed) {
-		multiplier = 2
-		currentLevel = currentLevel < 100 ? 100 : currentLevel;
-		targetLevel = targetLevel < 100 ? 100 : targetLevel;
+	$: {
+		multiplier = 1
+		if (oathed) {
+			multiplier = 2
+			currentLevel = currentLevel < 100 ? 100 : currentLevel;
+			targetLevel = targetLevel < 100 ? 100 : targetLevel;
+		}
+		currentLevel = (oathed && currentLevel < 100) ? 100 : currentLevel;
+		currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
+		levelDifference = targetLevel - currentLevel;
+		xpToGain = (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / multiplier
 	}
-	$: currentLevel = (oathed && currentLevel < 100) ? 100 : currentLevel;
-	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
-	$: levelDifference = targetLevel - currentLevel;
-	$: xpToGain = (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / multiplier
 </script>
 
 <main>
