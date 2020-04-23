@@ -142,7 +142,7 @@
 	function xpIfOathed(current, target, oath) {
 		if (target > 100 && current < 100) {
 			return xpUnder100(current, 100) + xpOver100(100, target, oath);
-		} else if (target < 100) {
+		} else if (target <= 100) {
 			return xpUnder100(current, target);
 		} else if (current >= 100) {
 			return xpOver100(current, target, oath);
@@ -198,6 +198,11 @@
 		margin: auto;
 		margin: 1rem;
 		
+	}
+
+
+	h2 {
+		font-size: 1.25rem;
 	}
 
 	.range {

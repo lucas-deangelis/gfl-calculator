@@ -92,6 +92,10 @@
 		margin: 1rem;
 	}
 
+	h2 {
+		font-size: 1.25rem;
+	}
+
 	.range {
 		width: 500px;
 	}

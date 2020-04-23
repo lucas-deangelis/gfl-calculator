@@ -1,24 +1,20 @@
 <script>
-	import Tdoll from "./Tdoll.svelte";
-	import Fairy from "./Fairy.svelte";
-	import Hoc from "./Hoc.svelte";
+	import CombatReport from "./CombatReport.svelte";
+	import NeuralUpgrade from "./NeuralUpgrade.svelte";
 
-	let display = "t-doll";
+	let menu = "combat-report";
 </script>
 
 <main>
-	<h1>Combat report calculator</h1>
+	<nav>
+		<button class="menu" on:click="{() => { menu = "combat-report" }}" class:selected={menu == "combat-report"}>Combat reports</button>
+		<button class="menu" on:click="{() => { menu = "neural-upgrade" }}" class:selected={menu == "neural-upgrade"}>Neural upgrade</button>
+	</nav>
 
-	<button on:click="{() => { display = "t-doll"}}" class:selected="{display == "t-doll"}">T-dolls</button>
-	<button on:click="{() => { display = "fairy"}}" class:selected="{display == "fairy"}">Fairies</button>
-	<button on:click="{() => { display = "hoc"}}" class:selected="{display == "hoc"}">HOCs</button>
-
-	{#if display == "t-doll"}
-		<Tdoll />
-	{:else if display == "fairy"}
-		<Fairy />
-	{:else if display == "hoc"}
-		<Hoc />
+	{#if menu == "combat-report"}
+		<CombatReport />
+	{:else if menu == "neural-upgrade"}
+		<NeuralUpgrade />
 	{/if}
 </main>
 
@@ -42,6 +38,16 @@
 	.selected {
 		background-color: #ff3e00;
 		color: white;
+	}
+
+	nav {
+		height: 3rem;
+	}
+
+	button:hover {
+		background-color: #ff3e00;
+		color: white;
+		cursor: pointer;
 	}
 
 	@media (min-width: 640px) {
