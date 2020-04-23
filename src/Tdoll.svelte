@@ -127,20 +127,32 @@
 		30283200,
 	];
 
-	function xpIfOathed(current, target, oath) {
-		if (target > 100) {
-			return xpIfOathed(current, 100, oath) + xpIfOathed(100, target, oath);
-		} else if (target > 100 && current >= 100 && oath) {
-			// Here is the oath xp doubling for level >= 100
-			return (xpByLevel[target] - xpByLevel[current]) / 2;
+	function xpUnder100(current, target) {
+		return xpByLevel[target] - xpByLevel[current];
+	}
+
+	function xpOver100(current, target, oath) {
+		if (oath) {
+			return xpUnder100(current, target) / 2;
 		} else {
-			return xpByLevel[target] - xpByLevel[current];
+			return xpUnder100(current, target);
+		}
+	}
+
+	function xpIfOathed(current, target, oath) {
+		if (target > 100 && current < 100) {
+			return xpUnder100(current, 100) + xpOver100(100, target, oath);
+		} else if (target < 100) {
+			return xpUnder100(current, target);
+		} else if (current >= 100) {
+			return xpOver100(current, target, oath);
 		}
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDifference = targetLevel - currentLevel;
 	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
+	$: batteries = Math.ceil(xpToGain / 3000);
 </script>
 
 <main>
@@ -178,7 +190,7 @@
 
 	<p>Level to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
-	<p class="reports">Combat reports: <b>{Math.ceil(xpToGain / 3000)}</b></p>
+	<p class="reports">Combat reports: <b>{batteries}</b></p>
 </main>
 
 <style>
