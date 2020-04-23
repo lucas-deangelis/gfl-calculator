@@ -1,10 +1,150 @@
 <script>
-	export let name;
+	let currentLevel = 1;
+	let targetLevel = 90;
+	let oathed = false;
+
+	let xpByLevel = [
+  0,
+  100,
+  300,
+  600,
+  1000,
+  1500,
+  2100,
+  2800,
+  3600,
+  4500,
+  5500,
+  6600,
+  7800,
+  9100,
+  10500,
+  12000,
+  13600,
+  15300,
+  17100,
+  19000,
+  21000,
+  23100,
+  25300,
+  27600,
+  30000,
+  32500,
+  35100,
+  37900,
+  41000,
+  44400,
+  48600,
+  53200,
+  58200,
+  63600,
+  69400,
+  75700,
+  82400,
+  89600,
+  97300,
+  105500,
+  114300,
+  123600,
+  133500,
+  144000,
+  155100,
+  166900,
+  179400,
+  192500,
+  206400,
+  221000,
+  236400,
+  252500,
+  269400,
+  287100,
+  305700,
+  325200,
+  345600,
+  366900,
+  389200,
+  412500,
+  436800,
+  462100,
+  488400,
+  515800,
+  544300,
+  573900,
+  604700,
+  636700,
+  669900,
+  704300,
+  749400,
+  796200,
+  844800,
+  895200,
+  947400,
+  1001400,
+  1057300,
+  1115200,
+  1175000,
+  1236800,
+  1300700,
+  1366700,
+  1434800,
+  1505100,
+  1577700,
+  1652500,
+  1729600,
+  1809100,
+  1891000,
+  1975300,
+  2087900,
+  2204000,
+  2323500,
+  2446600,
+  2573300,
+  2703700,
+  2837800,
+  2975700,
+  3117500,
+  3263200,
+  3363200,
+  3483200,
+  3623200,
+  3783200,
+  3963200,
+  4163200,
+  4383200,
+  4623200,
+  4903200,
+  5263200,
+  5743200,
+  6383200,
+  7283200,
+  8483200,
+  10083200,
+  12283200,
+  15283200,
+  19283200,
+  24283200,
+  30283200,
+];
+
+	$: levelDifference = targetLevel - currentLevel;
+	$: xpToGain = oathed ? (xpByLevel[levelDifference] / 2) : xpByLevel[levelDifference];
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>Combat report calculator</h1>
+	<input type="text" bind:value={currentLevel}>
+	<input type="range" min="1" max="120" bind:value={currentLevel}>
+	
+	<input type="text" bind:value={targetLevel}>
+	<input type="range" min="1" max="120" bind:value={targetLevel}>
+
+	<br><label>
+		<input type="checkbox" bind:checked={oathed}> Oath
+	</label>
+
+	<p>Level to gain: {levelDifference}</p>
+	<p>XP to gain: {xpToGain}</p>
+	<p>Combat reports: {Math.ceil(xpToGain / 3000)}</p>
 </main>
 
 <style>
