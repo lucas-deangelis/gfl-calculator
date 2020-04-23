@@ -72,14 +72,11 @@
 	</datalist>
 
 	<br>
-	
+
 	<label>
 		<input type="checkbox" bind:checked={oathed}>Oathed
+		<p class:invisible={!oathed} class:oath={oathed}>You can't</p>
 	</label>
-
-	{#if oathed}
-		<p>You can't</p>
-	{/if}
 
 	<hr>
 
@@ -102,5 +99,15 @@
 
 	.reports {
 		font-size: 1.5rem;
+	}
+
+	.invisible {
+		display: none;
+	}
+
+	.oath {
+		display: inline;
+		color: red;
+		font-weight: bold;
 	}
 </style>
