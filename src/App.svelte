@@ -138,9 +138,13 @@
 	<input type="number" bind:value={targetLevel}>
 	<input type="range" min="1" max="120" bind:value={targetLevel}>
 
-	<br><label>
+	<br>
+	
+	<label>
 		<input type="checkbox" bind:checked={oathed}> Oath
 	</label>
+
+	<hr>
 
 	<p>Level to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
