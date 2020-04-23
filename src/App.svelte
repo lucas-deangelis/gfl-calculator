@@ -126,17 +126,23 @@
   30283200,
 ];
 
+	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDifference = targetLevel - currentLevel;
 	$: xpToGain = oathed ? ((xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / 2) : (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]);
 </script>
 
 <main>
 	<h1>Combat report calculator</h1>
-	<input type="number" bind:value={currentLevel}>
-	<input type="range" min="1" max={targetLevel} bind:value={currentLevel}>
+
+	<div class="current">
+		<input type="number" bind:value={currentLevel}>
+		<input type="range" min="1" max="120" bind:value={currentLevel}>
+	</div>
 	
-	<input type="number" bind:value={targetLevel}>
-	<input type="range" min="1" max="120" bind:value={targetLevel}>
+	<div class="target">
+		<input type="number" bind:value={targetLevel}>
+		<input type="range" min="1" max="120" bind:value={targetLevel}>
+	</div>
 
 	<br>
 	
