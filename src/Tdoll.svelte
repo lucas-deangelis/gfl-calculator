@@ -1,12 +1,10 @@
 <script>
 	let currentLevel = 1;
 	let targetLevel = 90;
-	let levelDifference = 0;
-	let multiplier = 1;
-	let xpToGain = 0;
 	let oathed = false;
 
 	let xpByLevel = [
+		0,
 		0,
 		100,
 		300,
@@ -129,18 +127,20 @@
 		30283200,
 	];
 
-	$: {
-		multiplier = 1
-		if (oathed) {
-			multiplier = 2
-			currentLevel = currentLevel < 100 ? 100 : currentLevel;
-			targetLevel = targetLevel < 100 ? 100 : targetLevel;
+	function xpIfOathed(current, target, oath) {
+		if (target > 100) {
+			return xpIfOathed(current, 100, oath) + xpIfOathed(100, target, oath);
+		} else if (target > 100 && current >= 100 && oath) {
+			// Here is the oath xp doubling for level >= 100
+			return (xpByLevel[target] - xpByLevel[current]) / 2;
+		} else {
+			return xpByLevel[target] - xpByLevel[current];
 		}
-		currentLevel = (oathed && currentLevel < 100) ? 100 : currentLevel;
-		currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
-		levelDifference = targetLevel - currentLevel;
-		xpToGain = (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / multiplier
 	}
+
+	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
+	$: levelDifference = targetLevel - currentLevel;
+	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
 </script>
 
 <main>
@@ -171,7 +171,7 @@
 	<br>
 	
 	<label>
-		<input type="checkbox" bind:checked={oathed}>Oathed (mod only)
+		<input type="checkbox" bind:checked={oathed}>Oathed (doubles xp gain when level > 100)
 	</label>
 
 	<hr>
