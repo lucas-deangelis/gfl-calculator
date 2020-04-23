@@ -127,7 +127,7 @@
 ];
 
 	$: levelDifference = targetLevel - currentLevel;
-	$: xpToGain = oathed ? (xpByLevel[levelDifference] / 2) : xpByLevel[levelDifference];
+	$: xpToGain = oathed ? ((xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / 2) : (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]);
 </script>
 
 <main>
