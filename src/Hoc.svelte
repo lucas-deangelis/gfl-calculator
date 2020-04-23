@@ -90,7 +90,6 @@
 	input {
 		margin: auto;
 		margin: 1rem;
-		
 	}
 
 	.range {
