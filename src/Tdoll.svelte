@@ -126,9 +126,16 @@
 		30283200,
 	];
 
+	$: multiplier = 1
+	$: if (oathed) {
+		multiplier = 2
+		currentLevel = currentLevel < 100 ? 100 : currentLevel;
+		targetLevel = targetLevel < 100 ? 100 : targetLevel;
+	}
+	$: currentLevel = (oathed && currentLevel < 100) ? 100 : currentLevel;
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDifference = targetLevel - currentLevel;
-	$: xpToGain = oathed ? ((xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / 2) : (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]);
+	$: xpToGain = (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]) / multiplier
 </script>
 
 <main>
@@ -159,7 +166,7 @@
 	<br>
 	
 	<label>
-		<input type="checkbox" bind:checked={oathed}>Oathed
+		<input type="checkbox" bind:checked={oathed}>Oathed (mod only)
 	</label>
 
 	<hr>
