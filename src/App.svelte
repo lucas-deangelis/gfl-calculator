@@ -134,15 +134,29 @@
 <main>
 	<h1>Combat report calculator</h1>
 
-	<div class="current">
-		<input type="number" bind:value={currentLevel}>
-		<input type="range" min="1" max="120" bind:value={currentLevel}>
+	<div class="level-input">
+		<h2>Current level</h2>
+		<input type="number" bind:value={currentLevel} class="number">
+		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
 	</div>
 	
-	<div class="target">
-		<input type="number" bind:value={targetLevel}>
-		<input type="range" min="1" max="120" bind:value={targetLevel}>
+	<div class="level-input">
+		<h2>Target level</h2>
+		<input type="number" bind:value={targetLevel} class="number">
+		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
 	</div>
+
+	<datalist id="levels">
+		<option value="1" label="1">
+		<option value="10" label="10">
+		<option value="30" label="30">
+		<option value="70" label="70">
+		<option value="90" label="90">
+		<option value="100" label="100">
+		<option value="110" label="110">
+		<option value="115" label="115">
+		<option value="120" label="120">
+	</datalist>
 
 	<br>
 	
@@ -154,7 +168,7 @@
 
 	<p>Level to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
-	<p>Combat reports: <b>{Math.ceil(xpToGain / 3000)}</b></p>
+	<p class="reports">Combat reports: <b>{Math.ceil(xpToGain / 3000)}</b></p>
 </main>
 
 <style>
@@ -163,6 +177,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+		font-size: 1.1rem;
 	}
 
 	h1 {
@@ -170,6 +185,20 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+	}
+
+	input {
+		margin: auto;
+		margin: 1rem;
+		
+	}
+
+	.range {
+		width: 500px;
+	}
+
+	.reports {
+		font-size: 1.5rem;
 	}
 
 	@media (min-width: 640px) {
