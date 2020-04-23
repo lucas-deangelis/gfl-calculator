@@ -133,7 +133,7 @@
 <main>
 	<h1>Combat report calculator</h1>
 	<input type="number" bind:value={currentLevel}>
-	<input type="range" min="1" max="120" bind:value={currentLevel}>
+	<input type="range" min="1" max={targetLevel} bind:value={currentLevel}>
 	
 	<input type="number" bind:value={targetLevel}>
 	<input type="range" min="1" max="120" bind:value={targetLevel}>
@@ -148,7 +148,7 @@
 
 	<p>Level to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
-	<p>Combat reports: {Math.ceil(xpToGain / 3000)}</p>
+	<p>Combat reports: <b>{Math.ceil(xpToGain / 3000)}</b></p>
 </main>
 
 <style>
