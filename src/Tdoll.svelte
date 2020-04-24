@@ -158,13 +158,13 @@
 <main>
 	<div class="level-input">
 		<h2>Current level</h2>
-		<input type="number" bind:value={currentLevel} class="number">
+		<input type="number" min="1" max="120" bind:value={currentLevel} class="number">
 		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
 	</div>
 	
 	<div class="level-input">
 		<h2>Target level</h2>
-		<input type="number" bind:value={targetLevel} class="number">
+		<input type="number" min="1" max="120" bind:value={targetLevel} class="number">
 		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
 	</div>
 

@@ -36,19 +36,19 @@
 <main>
 	<div class="level-input">
 		<h2>Current level</h2>
-		<input type="number" bind:value={currentLevel} class="number">
+		<input type="number" min="1" max="100" bind:value={currentLevel} class="number">
 		<input type="range" min="1" max="100" list="hoc-levels" bind:value={currentLevel} class="range">
 	</div>
 	
 	<div class="level-input">
 		<h2>Target level</h2>
-		<input type="number" bind:value={targetLevel} class="number">
+		<input type="number" min="1" max="100" bind:value={targetLevel} class="number">
 		<input type="range" min="1" max="100" list="hoc-levels" bind:value={targetLevel} class="range">
 	</div>
 
 	<div class="level-input">
 		<h2>Training range level</h2>
-		<input type="number" bind:value={rangeLevel} class="number">
+		<input type="number" min="0" max="10" bind:value={rangeLevel} class="number">
 		<input type="range" min="0" max="10" list="training-range-levels" bind:value={rangeLevel} class="range">
 	</div>
 
