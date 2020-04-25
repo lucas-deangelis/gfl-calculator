@@ -132,57 +132,37 @@
 		30283200,
 	];
 
-	function xpUnder100(current, target) {
-		return xpByLevel[target] - xpByLevel[current];
+	// If current > target then return 0
+	function xpDiff(current, target) {
+		return Math.max(xpByLevel[target] - xpByLevel[current], 0);
 	}
 
-	function xpOver100(current, target, oath) {
-		if (oath) {
-			return xpUnder100(current, target) / 2;
-		} else {
-			return xpUnder100(current, target);
-		}
-	}
-
-	function xpIfOathed(current, target, oath) {
-		if (current >= target) {
-			return 0;
-		} else if (target > 100 && current < 100) {
-			return xpUnder100(current, 100) + xpOver100(100, target, oath);
-		} else if (target <= 100) {
-			return xpUnder100(current, target);
-		} else if (current >= 100) {
-			return xpOver100(current, target, oath);
-		}
-	}
-
-	function zip(arrays) {
-		return arrays[0].map(function(_, i) {
-			return arrays.map(function(array) {
-				return array[i];
-			});
-		});
-	}
-
-	function runsNb(current, target, oath, event, command, leader, MVP) {
-		let levelsCurrent = [1, 10, 30, 70, 90].map(l => (l < current ? current : l));
-		let levelsTarget = [10, 30, 70, 90, 120].map(l => (l < target ? l : target));
+	// Example with current=55 and target=95
+	// levelsCurrent = [55, 55, 55, 70, 90, 100]
+	// levelsTarget = [10, 30, 70, 90, 95, 95]
+	function runsExp(current, target, oath, event, command, leader, MVP) {
+		let levelsCurrent = [1, 10, 30, 70, 90, 100].map(l => (l < current ? current : l));
+		let levelsTarget = [10, 30, 70, 90, 100, 120].map(l => (l < target ? l : target));
 		let buff = 1 * (event ? 1.5 : 1) * (command ? 1.25 : 1) * (MVP ? 1.3 : 1) * (leader ? 1.2 : 1);
-		let expMult = [1, 1.5, 2.0, 2.5, 3.0].map(x => x * buff); // Multi
-		let levelsZip = zip([levelsCurrent, levelsTarget, expMult]);
-		return (
-			(MVP ? 2 : 1) * // MVP doubles the numbers of run
-			levelsZip.reduce(
-				(acc, [cur, tar, exp]) => acc + Math.ceil(xpIfOathed(cur, tar, oath) / (490 * 5 * exp)),
-				0,
-			)
-		);
+		let expMult = [1, 1.5, 2.0, 2.5, 3.0, 3.0].map(x => x * buff);
+		let xp = 0;
+		let r = 0;
+
+		// Last exp multiplier (lv100 -> lv120) is doubled if oath
+		expMult[expMult.length - 1] *= oath ? 2.0 : 1.0;
+
+		for (var i = 0; i < levelsCurrent.length; i++) {
+			let tmp = xpDiff(levelsCurrent[i], levelsTarget[i]);
+			xp += tmp;
+			r += Math.ceil(tmp / (490 * 5 * expMult[i]));
+		}
+
+		return [xp, r * (MVP ? 2 : 1.0)];
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDiff = targetLevel - currentLevel;
-	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
-	$: runs = runsNb(currentLevel, targetLevel, oathed, event, command, leader, MVP);
+	$: [xpToGain, runs] = runsExp(currentLevel, targetLevel, oathed, event, command, leader, MVP);
 </script>
 
 <style>
@@ -220,7 +200,9 @@
 
 	{#if info}
 		<p>
-			0-2 has 5 fights with <b>490 EXP</b> by fight, which makes it
+			0-2 has 5 fights with
+			<b>490 EXP</b>
+			by fight, which makes it
 			<b>2490 EXP</b>
 			by run
 		</p>
