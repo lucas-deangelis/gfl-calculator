@@ -80,7 +80,7 @@
 
 	<hr>
 
-	<p>Level to gain: {levelDifference}</p>
+	<p>Levels to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
 	<p class="reports">Special combat reports: <b>{combatReports}</b></p>
 	<p class="batteries">Batteries: <b>{batteries}</b></p>

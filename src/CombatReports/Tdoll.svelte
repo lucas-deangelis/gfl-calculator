@@ -188,7 +188,7 @@
 
 	<hr>
 
-	<p>Level to gain: {levelDifference}</p>
+	<p>Levels to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
 	<p class="reports">Combat reports: <b>{batteries}</b></p>
 </main>

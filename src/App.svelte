@@ -1,5 +1,6 @@
 <script>
-	import CombatReport from "./CombatReport.svelte";
+	import CombatReport from "./CombatReports/CombatReport.svelte";
+	import ZeroTwo from "./ZeroTwo/ZeroTwo.svelte";
 	import NeuralUpgrade from "./NeuralUpgrade.svelte";
 
 	let menu = "combat-report";
@@ -8,11 +9,14 @@
 <main>
 	<nav>
 		<button class="menu" on:click="{() => { menu = "combat-report" }}" class:selected={menu == "combat-report"}>Combat reports</button>
+		<button class="menu" on:click="{() => { menu = "0-2 runs" }}" class:selected={menu == "0-2 runs"}>0-2 runs</button>
 		<button class="menu" on:click="{() => { menu = "neural-upgrade" }}" class:selected={menu == "neural-upgrade"}>Neural upgrade</button>
 	</nav>
 
 	{#if menu == "combat-report"}
 		<CombatReport />
+	{:else if menu == "0-2 runs"}
+		<ZeroTwo />
 	{:else if menu == "neural-upgrade"}
 		<NeuralUpgrade />
 	{/if}
