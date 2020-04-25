@@ -141,8 +141,8 @@
 	// levelsCurrent = [55, 55, 55, 70, 90, 100]
 	// levelsTarget = [10, 30, 70, 90, 95, 95]
 	function runsExp(current, target, oath, event, command, leader, MVP) {
-		let levelsCurrent = [1, 10, 30, 70, 90, 100].map(l => (l < current ? current : l));
-		let levelsTarget = [10, 30, 70, 90, 100, 120].map(l => (l < target ? l : target));
+		let levelsCurrent = [1, 10, 30, 70, 90, 100].map(l => Math.max(current, l));
+		let levelsTarget = [10, 30, 70, 90, 100, 120].map(l => Math.min(target, l));
 		let buff = 1 * (event ? 1.5 : 1) * (command ? 1.25 : 1) * (MVP ? 1.3 : 1) * (leader ? 1.2 : 1);
 		let expMult = [1, 1.5, 2.0, 2.5, 3.0, 3.0].map(x => x * buff);
 		let xp = 0;
@@ -161,7 +161,7 @@
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
-	$: levelDiff = targetLevel - currentLevel;
+	$: levelDifference = targetLevel - currentLevel;
 	$: [xpToGain, runs] = runsExp(currentLevel, targetLevel, oathed, event, command, leader, MVP);
 </script>
 
@@ -271,7 +271,7 @@
 
 	<hr />
 
-	<p>Levels to gain: {levelDiff}</p>
+	<p>Levels to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
 	<p class="reports">
 		Number of runs:

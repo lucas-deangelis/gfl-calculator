@@ -127,79 +127,34 @@
 		30283200,
 	];
 
-	function xpUnder100(current, target) {
-		return xpByLevel[target] - xpByLevel[current];
+	// If current > target then return 0
+	function xpDiff(current, target) {
+		return Math.max(xpByLevel[target] - xpByLevel[current], 0);
 	}
 
-	function xpOver100(current, target, oath) {
-		if (oath) {
-			return xpUnder100(current, target) / 2;
-		} else {
-			return xpUnder100(current, target);
-		}
+	function xpDivide(xp, double) {
+		return Math.ceil(xp / (double ? 6000 : 3000));
 	}
 
-	function xpIfOathed(current, target, oath) {
-		if (target > 100 && current < 100) {
-			return xpUnder100(current, 100) + xpOver100(100, target, oath);
-		} else if (target <= 100) {
-			return xpUnder100(current, target);
-		} else if (current >= 100) {
-			return xpOver100(current, target, oath);
-		}
+	function reportsExp(current, target, oath) {
+		let xp1to100 = xpDiff(current, Math.min(target, 100));
+		let xp100to120 = xpDiff(Math.max(current, 100), Math.min(target, 120));
+		let reports1to100 = xpDivide(xp1to100, false);
+		let reports100to120 = xpDivide(xp100to120, oath);
+
+		return [xp1to100 + xp100to120, reports1to100 + reports100to120];
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDifference = targetLevel - currentLevel;
-	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
-	$: combatReports = Math.ceil(xpToGain / 3000);
+	$: [xpToGain, combatReports] = reportsExp(currentLevel, targetLevel, oathed);
 </script>
-
-<main>
-	<div class="level-input">
-		<h2>Current level</h2>
-		<input type="number" min="1" max="120" bind:value={currentLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
-	</div>
-	
-	<div class="level-input">
-		<h2>Target level</h2>
-		<input type="number" min="1" max="120" bind:value={targetLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
-	</div>
-
-	<datalist id="levels">
-		<option value="1" label="1">
-		<option value="10" label="10">
-		<option value="30" label="30">
-		<option value="70" label="70">
-		<option value="90" label="90">
-		<option value="100" label="100">
-		<option value="110" label="110">
-		<option value="115" label="115">
-		<option value="120" label="120">
-	</datalist>
-
-	<br>
-	
-	<label>
-		<input type="checkbox" bind:checked={oathed}>Oathed (doubles xp gain when level > 100)
-	</label>
-
-	<hr>
-
-	<p>Levels to gain: {levelDifference}</p>
-	<p>XP to gain: {xpToGain}</p>
-	<p class="reports">Combat reports: <b>{combatReports}</b></p>
-</main>
 
 <style>
 	input {
 		margin: auto;
 		margin: 1rem;
-		
 	}
-
 
 	h2 {
 		font-size: 1.25rem;
@@ -213,3 +168,46 @@
 		font-size: 1.5rem;
 	}
 </style>
+
+<main>
+	<div class="level-input">
+		<h2>Current level</h2>
+		<input type="number" min="1" max="120" bind:value={currentLevel} class="number" />
+		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range" />
+	</div>
+
+	<div class="level-input">
+		<h2>Target level</h2>
+		<input type="number" min="1" max="120" bind:value={targetLevel} class="number" />
+		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range" />
+	</div>
+
+	<datalist id="levels">
+		<option value="1" label="1" />
+		<option value="10" label="10" />
+		<option value="30" label="30" />
+		<option value="70" label="70" />
+		<option value="90" label="90" />
+		<option value="100" label="100" />
+		<option value="110" label="110" />
+		<option value="115" label="115" />
+		<option value="120" label="120" />
+	</datalist>
+
+	<br />
+
+	<label>
+		<input type="checkbox" bind:checked={oathed} />
+		<b>Oathed</b>
+		(2.0x EXP multiplier when level > 100)
+	</label>
+
+	<hr />
+
+	<p>Levels to gain: {levelDifference}</p>
+	<p>XP to gain: {xpToGain}</p>
+	<p class="reports">
+		Combat reports:
+		<b>{combatReports}</b>
+	</p>
+</main>
