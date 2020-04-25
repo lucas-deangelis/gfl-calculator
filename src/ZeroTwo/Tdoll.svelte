@@ -1,9 +1,12 @@
 <script>
 	let currentLevel = 1;
 	let targetLevel = 90;
-	let dummies = 1;
 	let oathed = false;
 	let info = false;
+	let event = false;
+	let command = false;
+	let leader = false;
+	let MVP = false;
 
 	let xpByLevel = [
 		0,
@@ -142,7 +145,9 @@
 	}
 
 	function xpIfOathed(current, target, oath) {
-		if (target > 100 && current < 100) {
+		if (current >= target) {
+			return 0;
+		} else if (target > 100 && current < 100) {
 			return xpUnder100(current, 100) + xpOver100(100, target, oath);
 		} else if (target <= 100) {
 			return xpUnder100(current, target);
@@ -151,78 +156,39 @@
 		}
 	}
 
+	function zip(arrays) {
+		return arrays[0].map(function(_, i) {
+			return arrays.map(function(array) {
+				return array[i];
+			});
+		});
+	}
+
+	function runsNb(current, target, oath, event, command, leader, MVP) {
+		let levelsCurrent = [1, 10, 30, 70, 90].map(l => (l < current ? current : l));
+		let levelsTarget = [10, 30, 70, 90, 120].map(l => (l < target ? l : target));
+		let buff = 1 * (event ? 1.5 : 1) * (command ? 1.25 : 1) * (MVP ? 1.3 : 1) * (leader ? 1.2 : 1);
+		let expMult = [1, 1.5, 2.0, 2.5, 3.0].map(x => x * buff); // Multi
+		let levelsZip = zip([levelsCurrent, levelsTarget, expMult]);
+		return (
+			(MVP ? 2 : 1) * // MVP doubles the numbers of run
+			levelsZip.reduce(
+				(acc, [cur, tar, exp]) => acc + Math.ceil(xpIfOathed(cur, tar, oath) / (490 * 5 * exp)),
+				0,
+			)
+		);
+	}
+
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
-	$: levelDifference = targetLevel - currentLevel;
+	$: levelDiff = targetLevel - currentLevel;
 	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
-	$: runs = Math.ceil(xpToGain / 2490);
+	$: runs = runsNb(currentLevel, targetLevel, oathed, event, command, leader, MVP);
 </script>
-
-<main>
-	<button on:click="{() => { info = !info }}" class:selected={info}>Infos</button>
-
-	{#if info}
-		<p>0-2 is 5 fights, 490xp by fight, which makes it <b>2490xp</b> by run</p>
-		<p>MVP get <b>1.3</b> times the xp</p>
-		<p>Echelon leader get <b>1.2</b> times the xp</p>
-		<p>XP gained is multiplied by 1 + (number of dummies * 0.5)</p>
-	{/if}
-
-	<div class="level-input">
-		<h2>Current level</h2>
-		<input type="number" min="1" max="120" bind:value={currentLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
-	</div>
-	
-	<div class="level-input">
-		<h2>Target level</h2>
-		<input type="number" min="1" max="120" bind:value={targetLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
-	</div>
-
-	<div class="level-input">
-		<h2>Number of dummy links</h2>
-		<input type="number" min="1" max="5" bind:value={dummies} class="number">
-		<input type="range" min="1" max="5" list="dummies" bind:value={dummies} class="range">
-	</div>
-
-	<datalist id="levels">
-		<option value="1" label="1">
-		<option value="10" label="10">
-		<option value="30" label="30">
-		<option value="70" label="70">
-		<option value="90" label="90">
-		<option value="100" label="100">
-		<option value="110" label="110">
-		<option value="115" label="115">
-		<option value="120" label="120">
-	</datalist>
-
-	<datalist id="dummies">
-		<option value="1"></option>
-		<option value="2"></option>
-		<option value="3"></option>
-		<option value="4"></option>
-		<option value="5"></option>
-	</datalist>
-
-	<br>
-	
-	<label>
-		<input type="checkbox" bind:checked={oathed}>Oathed (doubles xp gain when level > 100)
-	</label>
-
-	<hr>
-
-	<p>Levels to gain: {levelDifference}</p>
-	<p>XP to gain: {xpToGain}</p>
-	<p class="reports">Number of runs: <b>{runs}</b></p>
-</main>
 
 <style>
 	input {
 		margin: auto;
 		margin: 1rem;
-		
 	}
 
 	.selected {
@@ -242,3 +208,101 @@
 		font-size: 1.5rem;
 	}
 </style>
+
+<main>
+	<button
+		on:click={() => {
+			info = !info;
+		}}
+		class:selected={info}>
+		Infos
+	</button>
+
+	{#if info}
+		<p>
+			0-2 is 5 fights, 490xp by fight, which makes it
+			<b>2490xp</b>
+			by run
+		</p>
+		<p>
+			MVP get
+			<b>1.3</b>
+			times the xp
+		</p>
+		<p>
+			Echelon leader get
+			<b>1.2</b>
+			times the xp
+		</p>
+		<p>XP gained is multiplied by 1 + (number of dummies * 0.5)</p>
+	{/if}
+
+	<div class="level-input">
+		<h2>Current level</h2>
+		<input type="number" min="1" max="120" bind:value={currentLevel} class="number" />
+		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range" />
+	</div>
+
+	<div class="level-input">
+		<h2>Target level</h2>
+		<input type="number" min="1" max="120" bind:value={targetLevel} class="number" />
+		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range" />
+	</div>
+
+	<datalist id="levels">
+		<option value="1" label="1" />
+		<option value="10" label="10" />
+		<option value="30" label="30" />
+		<option value="70" label="70" />
+		<option value="90" label="90" />
+		<option value="100" label="100" />
+		<option value="110" label="110" />
+		<option value="115" label="115" />
+		<option value="120" label="120" />
+	</datalist>
+
+	<br />
+
+	<label>
+		<input type="checkbox" bind:checked={oathed} />
+		<b>Oathed</b>
+		(2.0x EXP multiplier when level > 100)
+	</label>
+
+	<label>
+		<input type="checkbox" bind:checked={event} />
+		<b>Exp Event</b>
+		(1.5x EXP multiplier)
+	</label>
+
+	<br />
+
+	<label>
+		<input type="checkbox" bind:checked={command} />
+		<b>Command Fairy</b>
+		(1.25x EXP multiplier)
+	</label>
+
+	<label>
+		<input type="checkbox" bind:checked={leader} />
+		<b>Leader</b>
+		(1.2x EXP multiplier)
+	</label>
+
+	<br />
+
+	<label>
+		<input type="checkbox" bind:checked={MVP} />
+		<b>MVP</b>
+		(1.3x EXP multiplier, doubles number of runs)
+	</label>
+
+	<hr />
+
+	<p>Levels to gain: {levelDiff}</p>
+	<p>XP to gain: {xpToGain}</p>
+	<p class="reports">
+		Number of runs:
+		<b>{runs}</b>
+	</p>
+</main>
