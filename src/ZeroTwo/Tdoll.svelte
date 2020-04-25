@@ -138,18 +138,23 @@
 	}
 
 	// Example with current=55 and target=95
-	// levelsCurrent = [55, 55, 55, 70, 90, 100]
-	// levelsTarget = [10, 30, 70, 90, 95, 95]
+	// levelsCurrent = [55, 55, 55, 70, 90, 100, 112]
+	// levelsTarget = [10, 30, 70, 90, 95, 95, 95]
 	function runsExp(current, target, oath, event, command, leader, MVP) {
-		let levelsCurrent = [1, 10, 30, 70, 90, 100].map(l => Math.max(current, l));
-		let levelsTarget = [10, 30, 70, 90, 100, 120].map(l => Math.min(target, l));
+		let levelsCurrent = [1, 10, 30, 70, 90, 100, 112].map(l => Math.max(current, l));
+		let levelsTarget = [10, 30, 70, 90, 100, 112, 120].map(l => Math.min(target, l));
 		let buff = 1 * (event ? 1.5 : 1) * (command ? 1.25 : 1) * (MVP ? 1.3 : 1) * (leader ? 1.2 : 1);
-		let expMult = [1, 1.5, 2.0, 2.5, 3.0, 3.0].map(x => x * buff);
+		let expMult = [
+			1, //lv1 -> lv10
+			1.5, // lv10 -> lv30
+			2.0, // lv30 -> lv70
+			2.5, // lv70 -> lv90
+			3.0, // lv90 -> lv100
+			3.0 * (oath ? 2.0 : 1.0), // lv100 -> lv112, double if oath
+			3.0 * 0.8 * (oath ? 2.0 : 1.0), // lv112 -> lv120, double if oath, 20% exp penalty
+		].map(x => x * buff);
 		let xp = 0;
 		let r = 0;
-
-		// Last exp multiplier (lv100 -> lv120) is doubled if oath
-		expMult[expMult.length - 1] *= oath ? 2.0 : 1.0;
 
 		for (var i = 0; i < levelsCurrent.length; i++) {
 			let tmp = xpDiff(levelsCurrent[i], levelsTarget[i]);
