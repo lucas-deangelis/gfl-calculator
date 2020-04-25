@@ -108,6 +108,7 @@
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
 	$: levelDifference = targetLevel - currentLevel;
 	$: xpToGain = (xpByLevel[targetLevel-1] - xpByLevel[currentLevel-1]);
+	$: combatReports = Math.ceil(xpToGain / 3000);
 </script>
 
 <main>
@@ -135,7 +136,7 @@
 
 	<p>Levels to gain: {levelDifference}</p>
 	<p>XP to gain: {xpToGain}</p>
-	<p class="reports">Combat reports: <b>{Math.ceil(xpToGain / 3000)}</b></p>
+	<p class="reports">Combat reports: <b>{combatReports}</b></p>
 </main>
 
 <style>

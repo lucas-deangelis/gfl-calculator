@@ -220,21 +220,11 @@
 
 	{#if info}
 		<p>
-			0-2 is 5 fights, 490xp by fight, which makes it
-			<b>2490xp</b>
+			0-2 has 5 fights with <b>490 EXP</b> by fight, which makes it
+			<b>2490 EXP</b>
 			by run
 		</p>
-		<p>
-			MVP get
-			<b>1.3</b>
-			times the xp
-		</p>
-		<p>
-			Echelon leader get
-			<b>1.2</b>
-			times the xp
-		</p>
-		<p>XP gained is multiplied by 1 + (number of dummies * 0.5)</p>
+		<p>EXP gained is multiplied by 1 + (number of dummies * 0.5)</p>
 	{/if}
 
 	<div class="level-input">
