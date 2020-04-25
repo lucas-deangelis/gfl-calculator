@@ -275,6 +275,8 @@
 		(1.5x EXP multiplier)
 	</label>
 
+	<br />
+
 	<label>
 		<input type="checkbox" bind:checked={command} />
 		<b>Command Fairy</b>
@@ -286,6 +288,8 @@
 		<b>Leader</b>
 		(1.2x EXP multiplier)
 	</label>
+
+	<br />
 
 	<label>
 		<input type="checkbox" bind:checked={MVP} />
