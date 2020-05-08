@@ -164,7 +164,6 @@
 			r += Math.ceil(tmp / (490 * 5 * expMult[i]));
 		}
 
-<<<<<<< HEAD:src/Runs/ZeroTwo.svelte
 	function zip(arrays) {
 		return arrays[0].map(function(_, i) {
 			return arrays.map(function(array) {
@@ -186,9 +185,6 @@
 				0,
 			)
 		);
-=======
-		return [xp, r * (MVP ? 2 : 1.0)];
->>>>>>> 360f245d05c561965ffa125ebfcf1748fbf24cd9:src/ZeroTwo/Tdoll.svelte
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;

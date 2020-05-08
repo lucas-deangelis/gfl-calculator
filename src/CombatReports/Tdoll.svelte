@@ -150,7 +150,6 @@
 	$: [xpToGain, combatReports] = reportsExp(currentLevel, targetLevel, oathed);
 </script>
 
-<<<<<<< HEAD
 <main>
 	<div class="level-input">
     <h2>Current level</h2>
@@ -193,8 +192,6 @@
 	<p class="reports">Combat reports: <b>{combatReports}</b></p>
 </main>
 
-=======
->>>>>>> 360f245d05c561965ffa125ebfcf1748fbf24cd9
 <style>
 	input {
 		margin: auto;
