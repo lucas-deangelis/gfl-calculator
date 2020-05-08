@@ -157,15 +157,19 @@
 
 <main>
 	<div class="level-input">
-		<h2>Current level</h2>
-		<input type="number" min="1" max="120" bind:value={currentLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
+    <h2>Current level</h2>
+    <div class="level-box">
+      <input type="number" min="1" max="120" bind:value={currentLevel} class="number">
+      <input type="range" min="1" max="120" list="levels" bind:value={currentLevel} class="range">
+    </div>
 	</div>
 	
 	<div class="level-input">
 		<h2>Target level</h2>
-		<input type="number" min="1" max="120" bind:value={targetLevel} class="number">
-		<input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
+    <div class="level-box">
+      <input type="number" min="1" max="120" bind:value={targetLevel} class="number">
+      <input type="range" min="1" max="120" list="levels" bind:value={targetLevel} class="range">
+    </div>
 	</div>
 
 	<datalist id="levels">
@@ -200,7 +204,6 @@
 		
 	}
 
-
 	h2 {
 		font-size: 1.25rem;
 	}
@@ -211,5 +214,17 @@
 
 	.reports {
 		font-size: 1.5rem;
+	}
+
+  .level-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media (min-width: 640px) {
+		.level-box {
+			flex-direction: row;
+		}
 	}
 </style>

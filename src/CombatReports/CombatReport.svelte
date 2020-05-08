@@ -21,13 +21,6 @@
 {/if}
 
 <style>
-	/* main {
-		text-align: center;
-		max-width: 240px;
-		margin: 0 auto;
-		font-size: 1.1rem;
-	} */
-
 	h1 {
 		color: #ff3e00;
 		text-transform: uppercase;
@@ -46,11 +39,5 @@
 		background-color: #ff3e00;
 		color: white;
 		cursor: pointer;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  }
 </style>

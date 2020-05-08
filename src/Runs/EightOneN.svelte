@@ -6,7 +6,9 @@
 	let event = false;
 	let command = false;
 	let leader = false;
-	let MVP = false;
+  let MVP = false;
+  let xpByFight = 500;
+  let nbOfFights = 5;
 
 	let xpByLevel = [
 		0,
@@ -173,7 +175,7 @@
 		return (
 			(MVP ? 2 : 1) * // MVP doubles the numbers of run
 			levelsZip.reduce(
-				(acc, [cur, tar, exp]) => acc + Math.ceil(xpIfOathed(cur, tar, oath) / (490 * 5 * exp)),
+				(acc, [cur, tar, exp]) => acc + Math.ceil(xpIfOathed(cur, tar, oath) / (xpByFight * nbOfFights * exp)),
 				0,
 			)
 		);
@@ -220,8 +222,8 @@
 
 	{#if info}
 		<p>
-			0-2 has 5 fights with <b>490 EXP</b> by fight, which makes it
-			<b>2490 EXP</b>
+			8-1n has 5 fights with <b>500 EXP</b> by fight, which makes it
+			<b>2500 EXP</b>
 			by run
 		</p>
 		<p>EXP gained is multiplied by 1 + (number of dummies * 0.5)</p>
