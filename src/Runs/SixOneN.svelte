@@ -223,8 +223,8 @@
 
 	{#if info}
 		<p>
-			0-2 has 5 fights with <b>490 EXP</b> by fight, which makes it
-			<b>2490 EXP</b>
+			6-3n has 2 fights with <b>500 EXP</b> by fight, which makes it
+			<b>1000 EXP</b>
 			by run
 		</p>
 		<p>EXP gained is multiplied by 1 + (number of dummies * 0.5)</p>

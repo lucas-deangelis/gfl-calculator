@@ -10,6 +10,7 @@
   let xpByFight = 490;
   let nbOfFights = 5;
 
+
 	let xpByLevel = [
 		0,
 		0,
@@ -134,35 +135,29 @@
 		30283200,
 	];
 
-	// If current > target then return 0
-	function xpDiff(current, target) {
-		return Math.max(xpByLevel[target] - xpByLevel[current], 0);
+	function xpUnder100(current, target) {
+		return xpByLevel[target] - xpByLevel[current];
 	}
 
-	// Example with current=55 and target=95
-	// levelsCurrent = [55, 55, 55, 70, 90, 100, 112]
-	// levelsTarget = [10, 30, 70, 90, 95, 95, 95]
-	function runsExp(current, target, oath, event, command, leader, MVP) {
-		let levelsCurrent = [1, 10, 30, 70, 90, 100, 112].map(l => Math.max(current, l));
-		let levelsTarget = [10, 30, 70, 90, 100, 112, 120].map(l => Math.min(target, l));
-		let buff = 1 * (event ? 1.5 : 1) * (command ? 1.25 : 1) * (MVP ? 1.3 : 1) * (leader ? 1.2 : 1);
-		let expMult = [
-			1, //lv1 -> lv10
-			1.5, // lv10 -> lv30
-			2.0, // lv30 -> lv70
-			2.5, // lv70 -> lv90
-			3.0, // lv90 -> lv100
-			3.0 * (oath ? 2.0 : 1.0), // lv100 -> lv112, double if oath
-			3.0 * 0.8 * (oath ? 2.0 : 1.0), // lv112 -> lv120, double if oath, 20% exp penalty
-		].map(x => x * buff);
-		let xp = 0;
-		let r = 0;
-
-		for (var i = 0; i < levelsCurrent.length; i++) {
-			let tmp = xpDiff(levelsCurrent[i], levelsTarget[i]);
-			xp += tmp;
-			r += Math.ceil(tmp / (490 * 5 * expMult[i]));
+	function xpOver100(current, target, oath) {
+		if (oath) {
+			return xpUnder100(current, target) / 2;
+		} else {
+			return xpUnder100(current, target);
 		}
+	}
+
+	function xpIfOathed(current, target, oath) {
+		if (current >= target) {
+			return 0;
+		} else if (target > 100 && current < 100) {
+			return xpUnder100(current, 100) + xpOver100(100, target, oath);
+		} else if (target <= 100) {
+			return xpUnder100(current, target);
+		} else if (current >= 100) {
+			return xpOver100(current, target, oath);
+		}
+	}
 
 	function zip(arrays) {
 		return arrays[0].map(function(_, i) {
@@ -188,8 +183,9 @@
 	}
 
 	$: currentLevel = currentLevel > targetLevel ? targetLevel : currentLevel;
-	$: levelDifference = targetLevel - currentLevel;
-	$: [xpToGain, runs] = runsExp(currentLevel, targetLevel, oathed, event, command, leader, MVP);
+	$: levelDiff = targetLevel - currentLevel;
+	$: xpToGain = xpIfOathed(currentLevel, targetLevel, oathed);
+	$: runs = runsNb(currentLevel, targetLevel, oathed, event, command, leader, MVP);
 </script>
 
 <style>
@@ -298,7 +294,7 @@
 
 	<hr />
 
-	<p>Levels to gain: {levelDifference}</p>
+	<p>Levels to gain: {levelDiff}</p>
 	<p>XP to gain: {xpToGain}</p>
 	<p class="reports">
 		Number of runs:
